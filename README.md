@@ -16,13 +16,9 @@
 
 ## About the project
 
-Chainlink [Cross Chain Interoperability Protocol](https://chain.link/cross-chain) (CCIP) is an interoperability solution
-that allows for the transfer of assets and/or messages between different blockchains. For a general overview of how CCIP
-works, we recommend reading the [official architecture docs](https://docs.chain.link/ccip/architecture). CCIP is
-currently live on 12 blockchains, with more to come in the near future.
+Chainlink [Cross Chain Interoperability Protocol](https://chain.link/cross-chain) (CCIP) is an interoperability solution that allows for the transfer of assets and/or messages between different blockchains. For a general overview of how CCIP works, we recommend reading the [official architecture docs](https://docs.chain.link/ccip/architecture). CCIP is currently live on 12 blockchains, with more to come in the near future.
 
-This audit will be for version 1.5 of the CCIP protocol. CCIP v1.5 enables token issuers to integrate their tokens with
-CCIP in a self-serve manner while maintaining ownership of token pool contracts and customized implementation logic.
+This audit will be for version 1.5 of the CCIP protocol. CCIP v1.5 enables token issuers to integrate their tokens with CCIP in a self-serve manner while maintaining ownership of token pool contracts and customized implementation logic.
 
 [Documentation](https://docs.chain.link/ccip)
 
@@ -65,29 +61,18 @@ In addition, for changes to existing contracts:
 
 ### Contracts
 
-We will examine the new contract introduced in this version of CCIP. For any existing contract, we will examine the main
-changes in them, but for a basic understanding of existing contracts please read the [public docs](https://docs.chain.link/ccip/architecture).
+We will examine the new contract introduced in this version of CCIP. For any existing contract, we will examine the main changes in them, but for a basic understanding of existing contracts please read the [public docs](https://docs.chain.link/ccip/architecture).
 
 #### TokenAdminRegistry
 
-The administrator of a token contract will be stored in the TokenAdministratorRegistry contract. This contract is owned
-by the CCIP Owner which will have a single instance deployed on each chain where CCIP is active.
-The TokenAdministratorRegistry will be a modular contract that at its core only stores the mapping between tokens and
-its Administrators and token pools. The registry is token pool type agnostic: It does not matter if the pool is of
-burnMint, lockRelease, or any other custom type.
+The administrator of a token contract will be stored in the TokenAdministratorRegistry contract. This contract is owned by the CCIP Owner which will have a single instance deployed on each chain where CCIP is active.
+The TokenAdministratorRegistry will be a modular contract that at its core only stores the mapping between tokens and its Administrators and token pools. The registry is token pool type agnostic: It does not matter if the pool is of burnMint, lockRelease, or any other custom type.
 
 The contract is not meant to be upgraded and is deliberately kept simple. It is extendable through RegistryModules.
 We start with a single registry module that allows registration through the `owner()` and the `getCCIPAdmin()` functions.
-In addition, the CCIP Owner can also propose administrators for tokens, allowing token contracts that cannot use the
-registration modules to still self-manage. Note that after registration even the CCIP Owner has zero permissions to
-modify or remove tokens.
+In addition, the CCIP Owner can also propose administrators for tokens, allowing token contracts that cannot use the registration modules to still self-manage. Note that after registration even the CCIP Owner has zero permissions to modify or remove tokens.
 
-The `owner()` and the `getCCIPAdmin()` methods have been chosen for different reasons. The `owner()` method is present
-on many existing contracts, meaning many contracts will be compatible without any modifications. The `getCCIPAdmin()`
-method is for protocols that are either upgradable or have not been deployed yet. This allows them to have an admin that
-is different from the owner of the contract, which might be preferable. Either one could be used, and the result of
-using either is that the returned address will be set as pendingAdministrator. This address then needs to explicitly
-accept the admin role before it takes effect.
+The `owner()` and the `getCCIPAdmin()` methods have been chosen for different reasons. The `owner()` method is present on many existing contracts, meaning many contracts will be compatible without any modifications. The `getCCIPAdmin()` method is for protocols that are either upgradable or have not been deployed yet. This allows them to have an admin that is different from the owner of the contract, which might be preferable. Either one could be used, and the result of using either is that the returned address will be set as pendingAdministrator. This address then needs to explicitly accept the admin role before it takes effect.
 
 #### Changes to existing contracts
 
@@ -107,23 +92,11 @@ accept the admin role before it takes effect.
 
 ### Upgrading to self serve pools
 
-CCIP already runs on many chains with various token pools. We have constructed an upgrade path that requires no
-involvement from the token issuers that are currently listed on CCIP. The upgrade path is contained in two Foundry
-tests, one for upgrading the older pools (pre-v1.4) and one for the newest pools (v1.4),
-`test_tokenPoolMigration_Success_1_2` and `test_tokenPoolMigration_Success_1_4`.
+CCIP already runs on many chains with various token pools. We have constructed an upgrade path that requires no involvement from the token issuers that are currently listed on CCIP. The upgrade path is contained in two Foundry tests, one for upgrading the older pools (pre-v1.4) and one for the newest pools (v1.4), `test_tokenPoolMigration_Success_1_2` and `test_tokenPoolMigration_Success_1_4`.
 
-Due to the differences between the older and the newer pools, the upgrade flow is slightly different. Both use the new
-`BurnMintTokenPoolAndProxy` or `LockReleaseTokenPoolAndProxy` pool contracts, which are both full self-serve token pools
-and can also act as a proxy for any older pool. For every older pool, we'd deploy the appropriate proxy pool and point
-it to the existing pool. For the pre-v1.4 pools, we would configure the proxy pool as a ramp on the contract, meaning it
-is allowed to make permissioned calls to the pool. The newer 1.4 pools check for allowed ramps in the Router, which
-means that we need to atomically change the Router to point to the new v1.5 lanes and change the router in the v1.4 pool
-to point to the v1.5 proxy pool. This can easily be done through the CCIP Admin as the multi-signature contract allows
-for batch transactions.
+Due to the differences between the older and the newer pools, the upgrade flow is slightly different. Both use the new `BurnMintTokenPoolAndProxy` or `LockReleaseTokenPoolAndProxy` pool contracts, which are both full self-serve token pools and can also act as a proxy for any older pool. For every older pool, we'd deploy the appropriate proxy pool and point it to the existing pool. For the pre-v1.4 pools, we would configure the proxy pool as a ramp on the contract, meaning it is allowed to make permissioned calls to the pool. The newer 1.4 pools check for allowed ramps in the Router, which means that we need to atomically change the Router to point to the new v1.5 lanes and change the router in the v1.4 pool to point to the v1.5 proxy pool. This can easily be done through the CCIP Admin as the multi-signature contract allows for batch transactions.
 
-After the router has been changed to point to v1.5 onRamps, all new messages will use the new version of CCIP, without
-any downtime. Older messages will still be processed and the existing pre-v1.5 token pools will still allow for the
-minting/releasing of funds for these messages.
+After the router has been changed to point to v1.5 onRamps, all new messages will use the new version of CCIP, without any downtime. Older messages will still be processed and the existing pre-v1.5 token pools will still allow for the minting/releasing of funds for these messages.
 
 NOTE: The USDC token pools don't have a proxy version as they can be upgraded without any interaction with Circle, due
 to the use of Circle’s CCTP.
@@ -184,17 +157,9 @@ ccip
 
 Blockchains: Any fully EVM-compatible chain
 
-Tokens: Any contract can be registered as a token pool or token. This does not mean CCIP works for every token and/or
-pool. Any standard ERC-20 token should be supported. Strictly speaking, we currently only support ERC-20, but that does
-not mean other variants won't work or cannot be made to work with a custom token pool. With a custom token pool, even
-rebasing assets could be made to work by sending the underlying `shares` data in the payload from the source pool to the
-destination pool.
+Tokens: Any contract can be registered as a token pool or token. This does not mean CCIP works for every token and/or pool. Any standard ERC-20 token should be supported. Strictly speaking, we currently only support ERC-20, but that does not mean other variants won't work or cannot be made to work with a custom token pool. With a custom token pool, even rebasing assets could be made to work by sending the underlying `shares` data in the payload from the source pool to the destination pool.
 
-We do **not** offer any guarantees of functionality for anything besides standard ERC-20s. We do guarantee that any token
-should **at most** be able to influence the CCIP message it is contained in. This means we are aware that a malicious token
-could make any CCIP message containing that malicious token un-executable forever. This poses a risk when a transaction
-contains multiple tokens, as a single one of them could prevent the other from being released. This vector is known and
-acknowledged and not in scope for this contest.
+We do **not** offer any guarantees of functionality for anything besides standard ERC-20s. We do guarantee that any token should **at most** be able to influence the CCIP message it is contained in. This means we are aware that a malicious token could make any CCIP message containing that malicious token un-executable forever. This poses a risk when a transaction contains multiple tokens, as a single one of them could prevent the other from being released. This vector is known and acknowledged and not in scope for this contest.
 
 [//]: # (scope-close)
 
@@ -228,16 +193,11 @@ make aderyn
 
 ## Getting started
 
-We encourage anyone to deploy and register tokens on our CCIP testnet environment. There are various tests included in
-this repo that depict how all the contracts should be deployed to form a complete CCIP system, but to get anyone started
-we have deployed CCIP v1.5 across three testnets, ready to be used. These testnets are Sepolia, Avalanche Fuji, and BNB
-Chain Testnet. Due to CCIP requiring chain finality, we advise using Avalanche Fuji or BNB Chain Testnet as a source
-chain to speed up testing. The contract addresses are listed below.
+We encourage anyone to deploy and register tokens on our CCIP testnet environment. There are various tests included in this repo that depict how all the contracts should be deployed to form a complete CCIP system, but to get anyone started we have deployed CCIP v1.5 across three testnets, ready to be used. These testnets are Sepolia, Avalanche Fuji, and BNB Chain Testnet. Due to CCIP requiring chain finality, we advise using Avalanche Fuji or BNB Chain Testnet as a source chain to speed up testing. The contract addresses are listed below.
 
 ### Adding your token to CCIP
 
-Adding your token to CCIP can easily be done in just a few steps. This guide assumes you do not have a token deployed
-yet. If you do, you can skip the token deploy step.
+Adding your token to CCIP can easily be done in just a few steps. This guide assumes you do not have a token deployed yet. If you do, you can skip the token deploy step.
 
 The steps are as follows:
 
@@ -253,26 +213,20 @@ Below is an image of the dependency graph between these actions:
 
 - Deploy a token
 
-Any standard ERC-20 token can be used, but for testing, we recommend using the [BurnMintERC677](https://github.com/Cyfrin/2024-07-CL-CCIP/blob/main/shared/token/ERC677/BurnMintERC677.sol)
-included in this repo. This token is also used in all of the Foundry tests. The next steps will assume this token is used.
+Any standard ERC-20 token can be used, but for testing, we recommend using the [BurnMintERC677](https://github.com/Cyfrin/2024-07-CL-CCIP/blob/main/shared/token/ERC677/BurnMintERC677.sol) included in this repo. This token is also used in all of the Foundry tests. The next steps will assume this token is used.
 
 - Deploy a token pool
 
 Assuming the BurnMintERC677 has been deployed, we can deploy a [BurnMint](https://github.com/Cyfrin/2024-07-CL-CCIP/blob/main/ccip/pools/BurnMintTokenPool.sol) token pool.
-If your token does not support burning and minting you should use the [LockRelease](https://github.com/Cyfrin/2024-07-CL-CCIP/blob/main/ccip/pools/LockReleaseTokenPool.sol) token pool variant. There are
-multiple variants of the BurnMint pool, each using a different burn signature.
+If your token does not support burning and minting you should use the [LockRelease](https://github.com/Cyfrin/2024-07-CL-CCIP/blob/main/ccip/pools/LockReleaseTokenPool.sol) token pool variant. There are multiple variants of the BurnMint pool, each using a different burn signature.
 
 - Claim to become the admin of the token
 
-We can now claim to become the admin of the just deployed token. Since BurnMintERC677 implements the `owner()` function, we
-will use that to make our claim. We call `registerAdminViaOwner` with as the only argument the token address. We should
-now be set as the pendingAdministrator in the TokenAdminRegistry. We call `acceptAdminRole` again with the token address
-and have successfully claimed our admin role.
+We can now claim to become the admin of the just deployed token. Since BurnMintERC677 implements the `owner()` function, we will use that to make our claim. We call `registerAdminViaOwner` with as the only argument the token address. We should now be set as the pendingAdministrator in the TokenAdminRegistry. We call `acceptAdminRole` again with the token address and have successfully claimed our admin role.
 
 - Set the remote pool(s) on the pool
 
-Assuming we've completed the above deployment steps on at least one other chain, we can set the remote tokens and pools
-on our local pool. To do that we call `applyChainUpdates` on the token pool. The arguments are as follows:
+Assuming we've completed the above deployment steps on at least one other chain, we can set the remote tokens and pools on our local pool. To do that we call `applyChainUpdates` on the token pool. The arguments are as follows:
 
 ```solidity
   struct ChainUpdate {
@@ -285,21 +239,15 @@ on our local pool. To do that we call `applyChainUpdates` on the token pool. The
   }
 ```
 
-Note that the remotePoolAddress and the remoteTokenAddress are abi-encoded for EVM chains. This is to support non-EVM
-in the future. You can disable the rate limits for this example, they can always be adjusted at a later time. To do this
-pass in `false` for `isEnabled` and `0`, `0` for `capacity` and `rate`.
+Note that the remotePoolAddress and the remoteTokenAddress are abi-encoded for EVM chains. This is to support non-EVM in the future. You can disable the rate limits for this example, they can always be adjusted at a later time. To do this pass in `false` for `isEnabled` and `0`, `0` for `capacity` and `rate`.
 
 - Set the pool for the token
 
-To set a pool for a token we call `setPool` on the TokenAdminRegistry with the token and pool as arguments. After this
-step, CCIP will allow token transfers between the configured chains we have set in the previous step
+To set a pool for a token we call `setPool` on the TokenAdminRegistry with the token and pool as arguments. After this step, CCIP will allow token transfers between the configured chains we have set in the previous step
 
 Congratulations, your token is now cross-chain!
 
-If you used the `BurnMintERC677` token you can call `grantMintAndBurnRoles(address burnAndMinter)` on it with as only
-argument your wallet address to permit yourself to mint. Then call `mint(address account, uint256 amount)` to create
-some tokens. These can now be used to call `ccipSend` on the Router for your first cross-chain token transaction with
-the newly deployed tokens and pools.
+If you used the `BurnMintERC677` token you can call `grantMintAndBurnRoles(address burnAndMinter)` on it with as only argument your wallet address to permit yourself to mint. Then call `mint(address account, uint256 amount)` to create some tokens. These can now be used to call `ccipSend` on the Router for your first cross-chain token transaction with the newly deployed tokens and pools.
 
 ### Contract addresses
 
