@@ -249,7 +249,7 @@ The steps are as follows:
 
 Below is an image of the dependency graph between these actions:
 
-![registration flow](./images/registration_order.png)
+<img src="https://res.cloudinary.com/droqoz7lg/image/upload/v1719916109/registration_order_dmfsos.png" width="100%" height="auto">
 
 - Deploy a token
 
