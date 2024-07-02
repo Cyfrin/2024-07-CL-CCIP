@@ -249,17 +249,17 @@ The steps are as follows:
 
 Below is an image of the dependency graph between these actions:
 
-<img src="https://res.cloudinary.com/droqoz7lg/image/upload/v1719916109/registration_order_dmfsos.png" width="100%" height="auto">
+![Registration order](https://res.cloudinary.com/droqoz7lg/image/upload/v1719916109/registration_order_dmfsos.png)
 
 - Deploy a token
 
-Any standard ERC-20 token can be used, but for testing, we recommend using the [BurnMintERC677](shared/token/ERC677/BurnMintERC677.sol)
+Any standard ERC-20 token can be used, but for testing, we recommend using the [BurnMintERC677](https://github.com/Cyfrin/2024-07-CL-CCIP/blob/main/shared/token/ERC677/BurnMintERC677.sol)
 included in this repo. This token is also used in all of the Foundry tests. The next steps will assume this token is used.
 
 - Deploy a token pool
 
-Assuming the BurnMintERC677 has been deployed, we can deploy a [BurnMint](ccip/pools/BurnMintTokenPool.sol) token pool.
-If your token does not support burning and minting you should use the [LockRelease](ccip/pools/LockReleaseTokenPool.sol) token pool variant. There are
+Assuming the BurnMintERC677 has been deployed, we can deploy a [BurnMint](https://github.com/Cyfrin/2024-07-CL-CCIP/blob/main/ccip/pools/BurnMintTokenPool.sol) token pool.
+If your token does not support burning and minting you should use the [LockRelease](https://github.com/Cyfrin/2024-07-CL-CCIP/blob/main/ccip/pools/LockReleaseTokenPool.sol) token pool variant. There are
 multiple variants of the BurnMint pool, each using a different burn signature.
 
 - Claim to become the admin of the token
