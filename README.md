@@ -335,4 +335,7 @@ The following versions have been validated to work with this repository.
   - There is no longer an official API that returns all supported tokens for a given destination in 1 call.
   - One should iterate through tokens via `getAllConfiguredTokens` in TokenAdminRegistry and then call `isSupportedChain` on its token pool.
 
+#### Additional Known Issues
+Any issues as detected by LightChaser, detailed ![here](https://github.com/Cyfrin/2024-07-CL-CCIP/issues/1)
+
 [//]: # (known-issues-close)
