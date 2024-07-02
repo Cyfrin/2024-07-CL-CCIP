@@ -10,7 +10,7 @@
 
 - nSLOC: 2114
 
-[//]: # "contest-details-open"
+[//]: # (contest-details-open)
 
 # Contest Details
 
