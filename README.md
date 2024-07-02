@@ -142,8 +142,9 @@ to the use of Circle’s CCTP.
   - We are aware that reentering CCIP is possible from a token pool. This should not impact the protocol
     - The ordering of some events can be changed, we do not rely on the ordering of events offchain
 
-[//]: # "contest-details-close"
-[//]: # "scope-open"
+[//]: # (contest-details-close)
+
+[//]: # (scope-open)
 
 ## Scope (contracts)
 
@@ -195,8 +196,9 @@ could make any CCIP message containing that malicious token un-executable foreve
 contains multiple tokens, as a single one of them could prevent the other from being released. This vector is known and
 acknowledged and not in scope for this contest.
 
-[//]: # "scope-close"
-[//]: # "getting-started-open"
+[//]: # (scope-close)
+
+[//]: # (getting-started-open)
 
 ## Setup
 
@@ -332,8 +334,9 @@ The following versions have been validated to work with this repository.
 - Aderyn: `0.1.4`
 - Slither: `0.10.3`
 
-[//]: # "getting-started-close"
-[//]: # "known-issues-open"
+[//]: # (getting-started-close)
+
+[//]: # (known-issues-open)
 
 ## Known issues
 
@@ -378,4 +381,4 @@ The following versions have been validated to work with this repository.
   - There is no longer an official API that returns all supported tokens for a given destination in 1 call.
   - One should iterate through tokens via `getAllConfiguredTokens` in TokenAdminRegistry and then call `isSupportedChain` on its token pool.
 
-[//]: # "known-issues-close"
+[//]: # (known-issues-close)
