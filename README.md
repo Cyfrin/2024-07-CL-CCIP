@@ -202,6 +202,12 @@ acknowledged and not in scope for this contest.
 
 ## Setup
 
+Clone contest repo
+```bash
+git clone https://github.com/Cyfrin/2024-07-CL-CCIP.git
+code 2024-07-CL-CCIP
+```
+
 Build & test
 
 ```bash
