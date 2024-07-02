@@ -1,0 +1,19 @@
+# misc
+.DS_Store
+.envrc
+.env*
+.dbenv
+.direnv
+.idea
+.vscode/
+*.iml
+debug.env
+*.txt
+
+foundry-artifacts
+foundry-cache
+
+# broadcasts
+!broadcast
+broadcast/*
+broadcast/*/31337/

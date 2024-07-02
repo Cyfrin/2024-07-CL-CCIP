@@ -1,0 +1,37 @@
+[profile.default]
+auto_detect_solc = true
+optimizer = true
+optimizer_runs = 3600
+
+solc_version = '0.8.24'
+src = 'ccip'
+test = 'test'
+script = 'test'
+evm_version = 'paris'
+out = 'foundry-artifacts'
+cache_path = 'foundry-cache'
+libs = ['foundry-lib']
+bytecode_hash = "none"
+ffi = false
+fs_permissions = [{ access = "read-write", path = "./" }]
+
+# default is zero, using a non-zero amount enables us to test e.g. billing based on gas prices.
+gas_price = 1
+block_timestamp = 1234567890
+block_number = 12345
+
+[fuzz]
+runs = 1024
+
+[fmt]
+tab_width = 2
+multiline_func_header = "params_first"
+sort_imports = true
+single_line_statement_blocks = "preserve"
+
+[rpc_endpoints]
+anvil = "${ANVIL_RPC_URL}"
+sepolia = "${SEPOLIA_RPC_URL}"
+avax_fuji = "${AVAX_FUJI_RPC_URL}"
+bsctestnet= "${BSC_TESTNET_RPC_URL}"
+amoy = "${AMOY_RPC_URL}"

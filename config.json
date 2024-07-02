@@ -1,0 +1,43 @@
+{
+  "defaultTokenConfig": {
+    "name": "DefaultToken",
+    "symbol": "DTKN",
+    "decimals": 18,
+    "maxSupply": "1000000000000000000000000"
+  },
+  "chains": {
+    "11155111": {
+      "name": "Sepolia",
+      "chainSelector": 16015286601757825753,
+      "Token": "0x0000000000000000000000000000000000000000",
+      "TokenPool": "0x0000000000000000000000000000000000000000",
+      "Router": "0xadd3cb08d0edbf71edade497436c73abf683ef0c",
+      "TokenAdminRegistry": "0x6a6eec13c4525eadda517c77e27b4bcfe74f1ab9",
+      "RegistrationModule": "0x94d70e71715d946b05d1fcd32cf04e3077016b7d",
+      "RMN": "0xe013be5430b72fa175c8e506c93dc056b70a2191",
+      "allowList": []
+    },
+    "43113": {
+      "name": "avalanche-testnet-fuji",
+      "chainSelector": 14767482510784806043,
+      "Token": "0x0000000000000000000000000000000000000000",
+      "TokenPool": "0x0000000000000000000000000000000000000000",
+      "Router": "0xe48712efd95adc5ddf9ad240ae8cd3a2663ba794",
+      "TokenAdminRegistry": "0x3f764ff0e803322e9e78f44840a1c478a2ae8975",
+      "RegistrationModule": "0xe9d8a02097f7a1c76371b96791de922601cefb19",
+      "RMN": "0x670303037afdf186a6539ba2b6df1b9d5c849301",
+      "allowList": []
+    },
+    "97": {
+      "name": "binance_smart_chain-testnet",
+      "chainSelector": 13264668187771770619,
+      "Token": "0x0000000000000000000000000000000000000000",
+      "TokenPool": "0x0000000000000000000000000000000000000000",
+      "Router": "0xa9e2c14215b0c8188a53c4186dbcbcb55b6e16dc",
+      "TokenAdminRegistry": "0xe2865c4310918c245abcca25a27834201ba28421",
+      "RegistrationModule": "0xebfd2f2068fc62f2d168fad34e81cc07be9cfdb9",
+      "RMN": "0x7766ea125c05c3c76d1fe09bd689fded57fcf9a8",
+      "allowList": []
+    }
+  }
+}
