@@ -22,6 +22,7 @@ contract MainSetupScript is BurnMintERC677Deploy, BurnMintTokenPoolDeploy, Regis
 
     function run() public {
         vm.startBroadcast(deployerPrivateKey);
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         deployBurnMintERC677();
         deployBurnMintTokenPool();
         registerAdminViaOwner();
