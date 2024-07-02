@@ -21,8 +21,8 @@ import "./06_SetPoolForToken.s.sol";
 contract MainSetupScript is BurnMintERC677Deploy, BurnMintTokenPoolDeploy, RegisterAdminViaOwner, ClaimTokenAdminRole, ApplyChainUpdates, SetPoolForToken{
 
     function run() public {
-        vm.startBroadcast(deployerPrivateKey);
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+        vm.startBroadcast(deployerPrivateKey);
         deployBurnMintERC677();
         deployBurnMintTokenPool();
         registerAdminViaOwner();
