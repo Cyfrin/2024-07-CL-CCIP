@@ -181,7 +181,7 @@ forge build
 forge test
 ```
 
-Static analysis, assuming slither and adaryn are installed.
+Static analysis, assuming slither and aderyn are installed.
 
 ```bash
 make slither -i
